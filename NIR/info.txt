@@ -1,0 +1,2 @@
+Тема 12 (2023г). Виртуальные частные сети на 3 уровне ЭМВОС (layer 3 VPNs, site-to-site, hub-and-spoke,
+VRF, L3VPN over Generic Routing Encapsulation tunnels)

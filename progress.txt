@@ -1,0 +1,8 @@
+lfp -> 0/?l
+1c -> 0/?l
+rimiss -> 2/7l 0/1c
+pocod -> 0/?l
+eco -> 0/1prez 0/10l
+pip -> 0/7l 0/1c
+
+NIR -> 0/1
