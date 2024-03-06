@@ -1,2 +1,22 @@
 Тема 12 (2023г). Виртуальные частные сети на 3 уровне ЭМВОС (layer 3 VPNs, site-to-site, hub-and-spoke,
 VRF, L3VPN over Generic Routing Encapsulation tunnels)
+
+https://www.sciencedirect.com/search?
+https://www.refseek.com/search?
+https://www.scienceresearch.com/scienceresearch/desktop/en/search.html
+https://duckduckgo.com/
+https://onlinelibrary.wiley.com/
+https://search.ebscohost.com/
+https://www.researchgate.net/
+https://ieeexplore.ieee.org/
+Для DOI (digital object identifier, https://www.doi.org/)
+
+Поисковики:
+https://sci-hub.st/ или https://sci-hub.wf/ или https://sci-hub.ru/ или
+http://libgen.lc/ по найденному значению DOI скачать (получить) 5 статей
+
+список использованных источников в формате или по ГОСТ Р 7.0.5-2008
+http://protect.gost.ru/v.aspx?control=8&baseC=-1&page=0&month=-1&year=-1&search=&RegNum=1&DocOnPageCount=15&id=165614
+или по стандарту Harvard (Harvard reference system,
+https://www.emeraldgrouppublishing.com/how-to/authoring-editing-reviewing/use-harvard-reference-system
+или https://www.emeraldgrouppublishing.com/sites/default/files/2020-08/how_to_harvard.pdf )

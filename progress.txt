@@ -1,7 +1,7 @@
 lfp -> 0/?l
-1c -> 4/?l
-rimiss -> 3/7l 0/1c
-pocod -> 0/?l
+1c -> 8/?l
+rimiss -> 6/7l 0/1c
+pocod -> 1/?l
 eco -> 0/1prez 0/10l
 pip -> 0/7l 0/1c
 
