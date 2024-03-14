@@ -1,0 +1,27 @@
+﻿1CV8LOG(ver 2.0)
+374c70aa-6e89-44cb-bcf0-d69afc69dbf4
+
+{1,071523a4-516f-4fce-ba4b-0d11ab7a1893,"",1},
+{2,"vLT2",1},
+{3,"Designer",1},
+{4,"_$Session$_.Authentication",1},
+{13,1,1},
+{4,"_$Session$_.Start",2},
+{4,"_$InfoBase$_.ConfigUpdate",3},
+{4,"_$InfoBase$_.DBConfigUpdateStart",4},
+{4,"_$InfoBase$_.PredefinedDataUpdate",5},
+{5,f37ada16-cd14-4cdf-90f1-483ced13cbb3,"",1},
+{5,9fe10deb-2205-402b-a26b-c24f9d3b51f4,"",2},
+{4,"_$InfoBase$_.DBConfigUpdate",6},
+{4,"_$Access$_.Access",7},
+{3,"1CV8C",2},
+{4,"_$Transaction$_.Begin",8},
+{4,"_$Data$_.New",9},
+{5,f37ada16-cd14-4cdf-90f1-483ced13cbb3,"Справочник.Студенты",1},
+{4,"_$Transaction$_.Commit",10},
+{5,9fe10deb-2205-402b-a26b-c24f9d3b51f4,"Справочник.Дисциплины",2},
+{3,"BackgroundJob",3},
+{4,"_$Session$_.Finish",11},
+{5,4d8a4bd6-5e7d-404e-8ef5-a2b736dd6810,"Документ.ЗанятияСтудентов",3},
+{4,"_$Data$_.Post",12},
+{4,"_$Data$_.Update",13}
