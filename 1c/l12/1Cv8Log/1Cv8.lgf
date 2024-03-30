@@ -25,4 +25,7 @@
 {5,dc4a70e4-d8a9-4562-9ba9-e92e8c762d6b,"Документ.ВыдачаКниг",3},
 {4,"_$Data$_.Post",12},
 {5,446d81c2-7fde-473b-8a53-d6b32e41fc65,"Документ.ВозвратКниг",4},
-{4,"_$Data$_.Update",13}
+{4,"_$Data$_.Update",13},
+{4,"_$Transaction$_.Rollback",14},
+{4,"_$InfoBase$_.DBConfigUpdateError",15},
+{4,"_$PerformError$_",16}

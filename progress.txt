@@ -1,8 +1,8 @@
 lfp -> 0/?l
-1c -> 11,13/?l
+1c -> 16/20l
 rimiss -> 7/7l 0/1c
 pocod -> 1/4p 2/4l
-eco -> 0/1prez 3/10l
-pip -> 1/7l 0/1c
+eco -> 4/10l 0/1prez
+pip -> 3/7l 0/1c
 
 NIR -> 0/1
