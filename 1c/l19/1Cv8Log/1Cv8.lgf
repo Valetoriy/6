@@ -1,0 +1,27 @@
+﻿1CV8LOG(ver 2.0)
+4dca6de0-11d7-408c-a1d5-8bb0614405b5
+
+{1,071523a4-516f-4fce-ba4b-0d11ab7a1893,"",1},
+{2,"vLT2",1},
+{3,"Designer",1},
+{4,"_$Session$_.Authentication",1},
+{13,1,1},
+{4,"_$Session$_.Start",2},
+{4,"_$InfoBase$_.ConfigUpdate",3},
+{4,"_$InfoBase$_.DBConfigUpdateStart",4},
+{4,"_$InfoBase$_.PredefinedDataUpdate",5},
+{5,c2a552d7-4e05-4703-aac8-2a441062e6b5,"",1},
+{5,51b8335e-1b2b-4b05-aa0a-caa018ab5126,"",2},
+{4,"_$InfoBase$_.DBConfigUpdate",6},
+{4,"_$Access$_.Access",7},
+{3,"1CV8C",2},
+{4,"_$Transaction$_.Begin",8},
+{4,"_$Data$_.New",9},
+{5,c2a552d7-4e05-4703-aac8-2a441062e6b5,"Справочник.Товары",1},
+{4,"_$Transaction$_.Commit",10},
+{5,51b8335e-1b2b-4b05-aa0a-caa018ab5126,"Справочник.Склады",2},
+{4,"_$Session$_.Finish",11},
+{5,89b7f039-df91-47d9-94fb-05c00a418ffe,"Документ.ПоступлениеТоваров",3},
+{4,"_$Data$_.Post",12},
+{4,"_$Data$_.Update",13},
+{5,b2b4252d-afd6-49a6-b682-f066d36df133,"Документ.ПродажаТоваров",4}

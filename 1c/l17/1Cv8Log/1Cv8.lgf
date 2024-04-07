@@ -1,0 +1,27 @@
+﻿1CV8LOG(ver 2.0)
+e6956f8a-288a-4784-b41e-b08c9075f294
+
+{1,071523a4-516f-4fce-ba4b-0d11ab7a1893,"",1},
+{2,"vLT2",1},
+{3,"Designer",1},
+{4,"_$Session$_.Authentication",1},
+{13,1,1},
+{4,"_$Session$_.Start",2},
+{4,"_$InfoBase$_.ConfigUpdate",3},
+{4,"_$InfoBase$_.DBConfigUpdateStart",4},
+{4,"_$InfoBase$_.PredefinedDataUpdate",5},
+{5,fc70ef02-05ad-4dbd-af4f-fb270793cba8,"",1},
+{4,"_$InfoBase$_.DBConfigUpdate",6},
+{4,"_$Access$_.Access",7},
+{3,"1CV8C",2},
+{4,"_$Transaction$_.Begin",8},
+{4,"_$Data$_.New",9},
+{5,fc70ef02-05ad-4dbd-af4f-fb270793cba8,"Справочник.Товары",1},
+{4,"_$Transaction$_.Commit",10},
+{5,6ba3f195-62c5-4906-881a-60337d973cc6,"Документ.ЗакупкаТоваров",2},
+{4,"_$Data$_.Post",11},
+{3,"BackgroundJob",3},
+{4,"_$Session$_.Finish",12},
+{5,a3d93445-c55c-4307-910a-f01cd2e02ff7,"Документ.ПродажаТоваров",3},
+{4,"_$Transaction$_.Rollback",13},
+{4,"_$InfoBase$_.DBConfigUpdateError",14}
