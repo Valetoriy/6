@@ -15,3 +15,5 @@ libgtk-3-0 libenchant1c2a libharfbuzz-icu0 libgstreamer1.0-0
 libgstreamer-plugins-base1.0-0 gstreamer1.0-plugins-good libsecret-1-0
 libsoup2.4-1 libsqlite3-0 libgl1 libegl1 libxrender1 libxfixes3
 libxslt1.1 geoclue-2.0 policykit-1 zenity x11-utils
+
+За 2 недели сделать мастеркласс по мобильной разработке и индивидуальное задание
