@@ -1,0 +1,77 @@
+import { Button } from "std-widgets.slint";
+
+// forward-focus
+component MMButton inherits Rectangle {
+    in property <string> text;
+    callback clicked <=> touch.clicked;
+
+    background: @linear-gradient(90deg, lightblue, white);
+    border-radius: 10px;
+
+    touch := TouchArea {
+        mouse-cursor: pointer;
+    }
+
+    states [
+        hover when touch.has-hover: {
+            root.border-width: 2px;
+            root.border-color: #0077FF;
+        }
+    ]
+    animate border-color { duration: 250ms; }
+
+    Text {
+        width: 90%;
+        text: text;
+        font-size: 16px;
+        font-weight: 550;
+        color: #0077FF;
+        wrap: word-wrap;
+        horizontal-alignment: center;
+    }
+}
+
+export component MainMenu inherits Window {
+    callback consult <=> consult-button.clicked;
+    callback profession_list <=> profession-list-button.clicked;
+    callback question_list <=> question-list-button.clicked;
+
+    title: "ЛР№2, Крылов А.В. ИКПИ-11";
+    width: 620px;
+    height: 450px;
+    background: @linear-gradient(90deg, #0077FF 30%, lightblue);
+
+    HorizontalLayout {
+        Image {
+            horizontal-alignment: left;
+            source: @image-url("main_menu.jpg");
+            image-fit: cover;
+        }
+
+        VerticalLayout {
+            min-width: 370px;
+            padding: 40px;
+            spacing: 20px;
+
+            Text {
+                color: white;
+                text: "ЭС для компьютерной фирмы";
+                font-size: 30px;
+                font-weight: 900;
+                wrap: word-wrap;
+            }
+
+            consult_button := MMButton {
+                text: "Провести консультацию";
+            }
+
+            profession_list_button := MMButton {
+                text: "Посмотреть список профессий";
+            }
+
+            question_list_button := MMButton {
+                text: "Посмотреть список вопросов для консультации";
+            }
+        }
+    }
+}
