@@ -1,6 +1,5 @@
 lfp -> 1/3l
 1c -> 20/20l 0/1ind
-rimiss -> 7/7l 0/1prez 1/1c
-econ -> 8,(7,8)/12l 0/1prez
+econ -> 8,(7,8,11,12)/12l 0,1/1prez
 
 NIR -> 0/1
