@@ -1,0 +1,131 @@
+import { HorizontalBox, GroupBox, ListView, TextEdit, Button, Palette, Slider, VerticalBox } from "std-widgets.slint";
+
+import { Page } from "page.slint";
+import { ModelAdapter, QPMapping } from "model_adapter.slint";
+
+component ProfessionListItem inherits Rectangle {
+    in-out property <string> text;
+    in property <int> index;
+    in property <int> p_index;
+    in-out property <string> traits;
+
+    background: Math.mod(index, 2) == 0 ? white : Palette.background;
+
+    p_edit := PopupWindow {
+        y: -500px;
+        width: 500px;
+        height: 750px;
+        close-on-click: false;
+
+        Rectangle {
+            background: Palette.background;
+            border-color: Palette.border;
+            border-width: 1px;
+        }
+
+        VerticalLayout {
+            GroupBox {
+                title: "Название профессии:";
+                TextEdit {
+                    max-height: 100px;
+                    text <=> text;
+                }
+            }
+
+            GroupBox {
+                title: "Личные качества:";
+                TextEdit {
+                    max-height: 100px;
+                    text <=> traits;
+                }
+            }
+
+            GroupBox {
+                title: "Коэффициенты для вопросов:";
+                ListView {
+                    for m in ModelAdapter.mapping_list: HorizontalBox {
+                        if m.p_index == p_index: HorizontalLayout {
+                            Text {
+                                text: ModelAdapter.index_to_question(m.q-index);
+                                wrap: word-wrap;
+                            }
+
+                            s := Slider {
+                                width: 100px;
+                                orientation: horizontal;
+                                minimum: 0;
+                                maximum: 1;
+                                value: m.value;
+                            }
+
+                            Text {
+                                width: 25px;
+                                text: s.value;
+                            }
+
+                            Button {
+                                width: 100px;
+                                text: "Сохранить";
+                                clicked => {
+                                    ModelAdapter.update_mapping(m.p-index, m.q-index, s.value);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Button {
+                text: "ОК";
+                clicked => {
+                    ModelAdapter.update_profession(p_index, text, traits);
+                    p-edit.close();
+                }
+            }
+        }
+    }
+
+    HorizontalLayout {
+        Text {
+            text: text;
+            wrap: word-wrap;
+        }
+
+        Button {
+            width: 100px;
+            text: "Редактировать";
+            clicked => {
+                p-edit.show();
+            }
+        }
+
+        Button {
+            width: 100px;
+            text: "Удалить";
+            clicked => {
+                ModelAdapter.remove_profession(p_index);
+            }
+        }
+    }
+}
+
+export component ProfessionListPage inherits Page {
+    title: "Список профессий";
+    VerticalLayout {
+        Button {
+            text: "Добавить";
+            clicked => {
+                ModelAdapter.add_profession();
+            }
+        }
+
+        ListView {
+            for p[i] in ModelAdapter.profession_list: ProfessionListItem {
+                text: p.prof-name;
+                index: i;
+                p_index: p.index;
+                traits: p.traits;
+            }
+        }
+    }
+}

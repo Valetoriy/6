@@ -1,0 +1,121 @@
+import { HorizontalBox, GroupBox, ListView, TextEdit, Button, Palette, Slider, VerticalBox } from "std-widgets.slint";
+
+import { Page } from "page.slint";
+import { ModelAdapter, QPMapping } from "model_adapter.slint";
+
+component QuestionListItem inherits Rectangle {
+    in-out property <string> text;
+    in property <int> index;
+    in property <int> q_index;
+
+    background: Math.mod(index, 2) == 0 ? white : Palette.background;
+
+    q_edit := PopupWindow {
+        y: -250px;
+        width: 500px;
+        height: 500px;
+        close-on-click: false;
+
+        Rectangle {
+            background: Palette.background;
+            border-color: Palette.border;
+            border-width: 1px;
+        }
+
+        VerticalLayout {
+            GroupBox {
+                title: "Формулировка вопроса:";
+                TextEdit {
+                    max-height: 100px;
+                    text <=> text;
+                }
+            }
+
+            GroupBox {
+                title: "Коэффициенты для профессий:";
+                ListView {
+                    for m in ModelAdapter.mapping_list: HorizontalBox {
+                        if m.q_index == q_index: HorizontalLayout {
+                            Text {
+                                text: ModelAdapter.index_to_profession(m.p-index);
+                                wrap: word-wrap;
+                            }
+
+                            s := Slider {
+                                width: 100px;
+                                orientation: horizontal;
+                                minimum: 0;
+                                maximum: 1;
+                                value: m.value;
+                            }
+
+                            Text {
+                                width: 25px;
+                                text: s.value;
+                            }
+
+                            Button {
+                                width: 100px;
+                                text: "Сохранить";
+                                clicked => {
+                                    ModelAdapter.update_mapping(m.p-index, m.q-index, s.value);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Button {
+                text: "ОК";
+                clicked => {
+                    ModelAdapter.update_question(q_index, text);
+                    q-edit.close();
+                }
+            }
+        }
+    }
+
+    HorizontalLayout {
+        Text {
+            text: text;
+            wrap: word-wrap;
+        }
+
+        Button {
+            width: 100px;
+            text: "Редактировать";
+            clicked => {
+                q-edit.show();
+            }
+        }
+
+        Button {
+            width: 100px;
+            text: "Удалить";
+            clicked => {
+                ModelAdapter.remove_question(q_index);
+            }
+        }
+    }
+}
+
+export component QuestionListPage inherits Page {
+    title: "Список вопросов";
+    VerticalLayout {
+        Button {
+            text: "Добавить";
+            clicked => {
+                ModelAdapter.add_question();
+            }
+        }
+
+        ListView {
+            for q[i] in ModelAdapter.question_list: QuestionListItem {
+                text: q.question;
+                index: i;
+                q_index: q.index;
+            }
+        }
+    }
+}

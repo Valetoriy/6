@@ -1,0 +1,41 @@
+@rust-attr(derive(serde::Serialize, serde::Deserialize))
+export struct Profession {
+    index: int,
+    prof_name: string,
+    traits: string,
+}
+
+@rust-attr(derive(serde::Serialize, serde::Deserialize))
+struct Question {
+    index: int,
+    question: string,
+}
+
+@rust-attr(derive(serde::Serialize, serde::Deserialize))
+export struct QPMapping {
+    p_index: int,
+    q_index: int,
+    value: float,
+}
+
+export global ModelAdapter {
+    in property <[Profession]> profession_list;
+    in property <[Question]> question_list;
+    in property <[QPMapping]> mapping_list;
+
+    callback update_mapping(/* p_index */ int, /* q_index */ int, float);
+
+    callback add_profession();
+    callback remove_profession(/* index */ int);
+    callback update_profession(/* index */ int, /* prof_name */ string, /* traits */ string);
+    pure callback index_to_question(int) -> string;
+
+    callback add_question();
+    callback remove_question(/* index */ int);
+    callback update_question(/* index */ int, /* question */ string);
+    pure callback index_to_profession(int) -> string;
+
+    // Консультация
+    in property <string> question_text;
+    callback question_answer(bool);
+}

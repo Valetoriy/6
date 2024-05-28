@@ -1,0 +1,28 @@
+import { SideBar } from "sidebar.slint";
+import { ProfessionListPage } from "profession_page.slint";
+import { Profession, ModelAdapter } from "model_adapter.slint";
+import { QuestionListPage } from "question_page.slint";
+import { ConsultPage } from "consult_page.slint";
+
+export * from "model_adapter.slint";
+
+export component AppWindow inherits Window {
+    title: "ЛР№2, Крылов А.В. ИКПИ-11";
+    preferred-width: 600px;
+    preferred-height: 400px;
+
+    HorizontalLayout {
+        side-bar := SideBar {
+            title: "Экспертная система";
+            model: [
+                "Провести консультацию",
+                "Посмотреть список профессий",
+                "Посмотреть список вопросов для консультации"
+            ];
+        }
+
+        if side-bar.current-item == 0: ConsultPage {}
+        if side-bar.current-item == 1: ProfessionListPage { }
+        if side-bar.current-item == 2: QuestionListPage { }
+    }
+}

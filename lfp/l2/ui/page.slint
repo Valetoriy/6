@@ -1,0 +1,14 @@
+import { VerticalBox, HorizontalBox } from "std-widgets.slint";
+
+export component Page inherits VerticalBox {
+    in property <string> title: "title";
+
+    HorizontalBox {
+        Text {
+            font-size: 20px;
+            text <=> root.title;
+        }
+    }
+
+    @children
+}

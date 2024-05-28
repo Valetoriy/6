@@ -1,0 +1,37 @@
+import { HorizontalBox, ListView, Button } from "std-widgets.slint";
+
+import { Page } from "page.slint";
+import { ModelAdapter } from "model_adapter.slint";
+
+export component ConsultPage inherits Page {
+    title: "Консультация";
+    max-height: 500px;
+
+    if ModelAdapter.question_text != "<end>": VerticalLayout {
+        Text {
+            height: 50%;
+            text: ModelAdapter.question_text;
+            horizontal-alignment: center;
+        }
+
+        HorizontalLayout {
+            Button {
+                max-height: 100px;
+                max-width: 200px;
+                text: "Да";
+                clicked => {
+                    ModelAdapter.question_answer(true);
+                }
+            }
+
+            Button {
+                max-height: 100px;
+                max-width: 200px;
+                text: "Нет";
+                clicked => {
+                    ModelAdapter.question_answer(false);
+                }
+            }
+        }
+    }
+}
