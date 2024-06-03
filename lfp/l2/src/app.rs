@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use rand::Rng;
-use slint::{Model, ModelExt, SharedString, VecModel};
+use slint::{format, Model, VecModel};
 
 slint::include_modules!();
 
@@ -12,7 +12,7 @@ pub struct App {
     question_model: Rc<VecModel<Question>>,
     mapping_model: Rc<VecModel<QPMapping>>,
 
-    question_text: SharedString,
+    prof_coef_model: Rc<VecModel<PCoef>>,
 }
 
 impl App {
@@ -38,7 +38,7 @@ impl App {
             .from_path("db/profs.csv")
             .unwrap();
         let profs: Vec<Profession> = rdr.deserialize().flatten().collect();
-        let profession_model = Rc::new(slint::VecModel::<Profession>::from(profs));
+        let profession_model = Rc::new(slint::VecModel::from(profs));
         app_window
             .global::<ModelAdapter>()
             .set_profession_list(profession_model.clone().into());
@@ -55,26 +55,38 @@ impl App {
 
         let mut rdr = csv::Reader::from_path("db/qp_mapping.csv").unwrap();
         let qpms: Vec<QPMapping> = rdr.deserialize().flatten().collect();
-        let mapping_model = Rc::new(slint::VecModel::<QPMapping>::from(qpms));
+        let mapping_model = Rc::new(slint::VecModel::from(qpms));
         app_window
             .global::<ModelAdapter>()
             .set_mapping_list(mapping_model.clone().into());
 
-        let question_text = question_model
-            .clone()
-            .map(|q| q.question + "?")
-            .row_data(0)
-            .unwrap_or("Список вопросов пуст".into());
+        let mut current_question = question_model.clone().row_data(0).unwrap_or(Question {
+            index: -1,
+            question: "".into(),
+        });
+        current_question.question += "?";
         app_window
             .global::<ModelAdapter>()
-            .set_question_text(question_text.clone());
+            .set_current_question(current_question.clone());
+
+        let coefs: Vec<PCoef> = profession_model
+            .iter()
+            .map(|p| PCoef {
+                index: p.index,
+                coef: 1.,
+            })
+            .collect();
+        let prof_coef_model = Rc::new(slint::VecModel::from(coefs));
+        app_window
+            .global::<ModelAdapter>()
+            .set_profession_coefs(prof_coef_model.clone().into());
 
         Self {
             app_window,
             profession_model,
             question_model,
             mapping_model,
-            question_text,
+            prof_coef_model,
         }
     }
 
@@ -226,6 +238,161 @@ impl App {
                         .find(|p| p.index == p_index)
                         .unwrap();
                     p.prof_name
+                }
+            });
+
+        // Consult
+        let app_weak = self.app_window.as_weak();
+        self.app_window
+            .global::<ModelAdapter>()
+            .on_restart_consult({
+                let profession_model = self.profession_model.clone();
+                let question_model = self.question_model.clone();
+                let prof_coef_model = self.prof_coef_model.clone();
+                let app_window = app_weak.unwrap();
+                move || {
+                    // Сбросить коэффициенты
+                    let coefs: Vec<PCoef> = profession_model
+                        .iter()
+                        .map(|p| PCoef {
+                            index: p.index,
+                            coef: 1.,
+                        })
+                        .collect();
+                    prof_coef_model.set_vec(coefs);
+
+                    // Заново установить первый вопрос
+                    let mut current_question = question_model.row_data(0).unwrap_or(Question {
+                        index: -1,
+                        question: "".into(),
+                    });
+                    current_question.question += "?";
+                    app_window
+                        .global::<ModelAdapter>()
+                        .set_current_question(current_question);
+                }
+            });
+
+        let app_weak = self.app_window.as_weak();
+        self.app_window
+            .global::<ModelAdapter>()
+            .on_question_answer({
+                let prof_coef_model = self.prof_coef_model.clone();
+                let mapping_model = self.mapping_model.clone();
+                let question_model = self.question_model.clone();
+                let profession_model = self.profession_model.clone();
+                let app_window = app_weak.unwrap();
+                move |answer| {
+                    let current_question =
+                        app_window.global::<ModelAdapter>().get_current_question();
+
+                    // Обновление коэффициентов профессий
+                    for i in 0..prof_coef_model.row_count() {
+                        let mut current_prof_coef = prof_coef_model.row_data(i).unwrap();
+                        let mut coef_value = mapping_model
+                            .iter()
+                            .find(|m| {
+                                m.p_index == current_prof_coef.index
+                                    && m.q_index == current_question.index
+                            })
+                            .unwrap()
+                            .value;
+
+                        if !answer {
+                            coef_value = 1. - coef_value;
+                        }
+
+                        current_prof_coef.coef *= coef_value;
+                        prof_coef_model.set_row_data(i, current_prof_coef);
+                    }
+
+                    // Проверка коэффициентов
+                    let sum = prof_coef_model.iter().map(|pc| pc.coef).sum::<f32>();
+                    if sum == 0. {
+                        app_window
+                            .global::<ModelAdapter>()
+                            .set_consult_status(ConsultStatus::NoResults);
+                        return;
+                    }
+
+                    // Поиск следующего вопроса
+                    let mut next_question_index = question_model
+                        .iter()
+                        .position(|q| q.index == current_question.index)
+                        .unwrap()
+                        + 1;
+                    while next_question_index < question_model.row_count() {
+                        let next_question = question_model.row_data(next_question_index).unwrap();
+
+                        let mut coef_sum = 0.;
+                        for m in mapping_model
+                            .iter()
+                            .filter(|m| m.q_index == next_question.index)
+                        {
+                            coef_sum += m.value
+                                * prof_coef_model
+                                    .iter()
+                                    .find(|pc| pc.index == m.p_index)
+                                    .unwrap()
+                                    .coef;
+                        }
+
+                        if coef_sum != 0. {
+                            break;
+                        }
+                        next_question_index += 1;
+                    }
+
+                    // Установление нового вопроса или завершение консультации
+                    match question_model.row_data(next_question_index) {
+                        Some(mut next_question) => {
+                            app_window.global::<ModelAdapter>().set_current_question({
+                                next_question.question = format!(
+                                    "{}/{}\n{}?",
+                                    next_question_index + 1,
+                                    question_model.row_count(),
+                                    next_question.question
+                                );
+                                next_question
+                            });
+                        }
+                        None => {
+                            let mut top5_profs: Vec<PCoef> =
+                                prof_coef_model.iter().filter(|pc| pc.coef != 0.).collect();
+                            top5_profs.sort_by(|a, b| b.coef.partial_cmp(&a.coef).unwrap());
+
+                            let mut result_string =
+                                String::from("Наиболее подходящие вам профессии:\n");
+                            for (i, pc) in top5_profs.iter().enumerate().take(5) {
+                                let prof_name = profession_model
+                                    .iter()
+                                    .find(|p| p.index == pc.index)
+                                    .unwrap()
+                                    .prof_name;
+                                result_string.push_str(&format!("{}. {}\n", i + 1, prof_name));
+                            }
+
+                            result_string.push_str("\nВаши личные качества:\n");
+                            let traits: String = profession_model
+                                .iter()
+                                .find(|p| p.index == top5_profs[0].index)
+                                .unwrap()
+                                .traits
+                                .into();
+                            let traits: Vec<_> = traits
+                                .split('.')
+                                .map(|line| std::format!("● {}\n", line.trim()))
+                                .collect();
+                            result_string.extend(traits);
+
+                            app_window
+                                .global::<ModelAdapter>()
+                                .set_result_text(result_string.into());
+                            app_window
+                                .global::<ModelAdapter>()
+                                .set_consult_status(ConsultStatus::ShowingResults);
+                        }
+                    }
                 }
             });
     }

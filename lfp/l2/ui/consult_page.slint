@@ -1,23 +1,28 @@
 import { HorizontalBox, ListView, Button } from "std-widgets.slint";
 
 import { Page } from "page.slint";
-import { ModelAdapter } from "model_adapter.slint";
+import { ModelAdapter, ConsultStatus } from "model_adapter.slint";
 
 export component ConsultPage inherits Page {
     title: "Консультация";
     max-height: 500px;
 
-    if ModelAdapter.question_text != "<end>": VerticalLayout {
+    if ModelAdapter.question_list.length == 0: Text {
+        height: 50%;
+        text: "Список вопросов пуст";
+        horizontal-alignment: center;
+    }
+
+    if ModelAdapter.question_list.length != 0 && ModelAdapter.consult_status == ConsultStatus.AskingQuestions: VerticalLayout {
         Text {
-            height: 50%;
-            text: ModelAdapter.question_text;
+            text: ModelAdapter.current_question.question;
+            wrap: word-wrap;
             horizontal-alignment: center;
         }
 
         HorizontalLayout {
             Button {
                 max-height: 100px;
-                max-width: 200px;
                 text: "Да";
                 clicked => {
                     ModelAdapter.question_answer(true);
@@ -26,11 +31,48 @@ export component ConsultPage inherits Page {
 
             Button {
                 max-height: 100px;
-                max-width: 200px;
                 text: "Нет";
                 clicked => {
                     ModelAdapter.question_answer(false);
                 }
+            }
+        }
+    }
+
+    if ModelAdapter.consult_status == ConsultStatus.ShowingResults: VerticalLayout {
+        Text {
+            text: "Результат консультации";
+            horizontal-alignment: center;
+        }
+
+        Text {
+            text: ModelAdapter.result_text;
+            horizontal-alignment: left;
+        }
+
+        Button {
+            max-height: 100px;
+            text: "Ок";
+            clicked => {
+                ModelAdapter.consult_status = ConsultStatus.AskingQuestions;
+                ModelAdapter.restart_consult();
+            }
+        }
+    }
+
+    if ModelAdapter.consult_status == ConsultStatus.NoResults: VerticalLayout {
+        Text {
+            text: "К сожалению, нам не удалось найти подходящую для вас профессию";
+            wrap: word-wrap;
+            horizontal-alignment: center;
+        }
+
+        Button {
+            max-height: 100px;
+            text: "Ок";
+            clicked => {
+                ModelAdapter.consult_status = ConsultStatus.AskingQuestions;
+                ModelAdapter.restart_consult();
             }
         }
     }

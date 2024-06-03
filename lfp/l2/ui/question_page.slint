@@ -11,7 +11,6 @@ component QuestionListItem inherits Rectangle {
     background: Math.mod(index, 2) == 0 ? white : Palette.background;
 
     q_edit := PopupWindow {
-        y: -250px;
         width: 500px;
         height: 500px;
         close-on-click: false;
@@ -95,6 +94,7 @@ component QuestionListItem inherits Rectangle {
             text: "Удалить";
             clicked => {
                 ModelAdapter.remove_question(q_index);
+                ModelAdapter.restart_consult();
             }
         }
     }
@@ -107,6 +107,7 @@ export component QuestionListPage inherits Page {
             text: "Добавить";
             clicked => {
                 ModelAdapter.add_question();
+                ModelAdapter.restart_consult();
             }
         }
 

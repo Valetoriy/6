@@ -12,9 +12,8 @@ component ProfessionListItem inherits Rectangle {
     background: Math.mod(index, 2) == 0 ? white : Palette.background;
 
     p_edit := PopupWindow {
-        y: -500px;
         width: 500px;
-        height: 750px;
+        height: 500px;
         close-on-click: false;
 
         Rectangle {
@@ -33,7 +32,7 @@ component ProfessionListItem inherits Rectangle {
             }
 
             GroupBox {
-                title: "Личные качества:";
+                title: "Личные качества (разделённые точками):";
                 TextEdit {
                     max-height: 100px;
                     text <=> traits;
@@ -104,6 +103,7 @@ component ProfessionListItem inherits Rectangle {
             text: "Удалить";
             clicked => {
                 ModelAdapter.remove_profession(p_index);
+                ModelAdapter.restart_consult();
             }
         }
     }
@@ -116,6 +116,7 @@ export component ProfessionListPage inherits Page {
             text: "Добавить";
             clicked => {
                 ModelAdapter.add_profession();
+                ModelAdapter.restart_consult();
             }
         }
 

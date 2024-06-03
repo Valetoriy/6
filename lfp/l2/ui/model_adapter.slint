@@ -18,6 +18,17 @@ export struct QPMapping {
     value: float,
 }
 
+export enum ConsultStatus {
+    AskingQuestions,
+    ShowingResults,
+    NoResults,
+}
+
+export struct PCoef {
+    index: int,
+    coef: float,
+}
+
 export global ModelAdapter {
     in property <[Profession]> profession_list;
     in property <[Question]> question_list;
@@ -36,6 +47,10 @@ export global ModelAdapter {
     pure callback index_to_profession(int) -> string;
 
     // Консультация
-    in property <string> question_text;
+    in property <ConsultStatus> consult_status: AskingQuestions;
+    in property <Question> current_question;
+    in property <[PCoef]> profession_coefs;
+    callback restart_consult();
     callback question_answer(bool);
+    in property <string> result_text;
 }
